@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>J# Runner</title>
+        <link rel="stylesheet" href="Style.css" />
+        <link rel="icon" type="x/icon" href="J Sharp Logo.png" />
+        <link rel="stylesheet" href="https://codemirror.net/6/theme/dracula.css">
+    </head>
+    <body>
+        <image src="J Sharp Logo.png" width="30px" height="auto" style="display: block;" title="About J#" href="WhatsJSharp.html" />
+        <h2 class="title">J# Runner</h2>
+        <h6 class="title2">Simple J# runner, made by AmadOS.</h6>
+        <div class="code-container">
+            <div class="line-numbers" id="lineNumbers"></div>
+            <textarea class="code" id="code" rows="10" cols="50">
+console.writeline("Hello from J#! I am mixed JS and C#!"); 
+console.writeline::Warn("This is a sample warning!"); 
+throw "A sample error" ("I am a sample thrown error, remove me if you need to right beside this panel.");
+
+            </textarea>
+        </div><br>
+        <button class="button-run" onclick="runJSharp()">Run</button>
+            <div class="output-header">
+                <h3 class="output-text">Output:</h3>
+            </div>
+        <div class="result" id="result">
+        <pre class="white" id="output">No code ran yet.</pre>
+        </div>
+
+<script>
+async function runJSharp() {
+    const code = document.getElementById("code").value.trim();
+    let output = document.getElementById("output");
+    let errored = 0;
+
+    // Match all Console.WriteLine("..."); occurrences
+    const regexWithSemicolon = /console\.writeline\s*\(\s*"([^"]*)"\s*\)\s*;/gi;
+    const regexWithoutSemicolon = /console\.writeline\s*\(\s*"([^"]*)"\s*\)\s*$/gi;
+
+    let matchesWithSemi = [...code.matchAll(regexWithSemicolon)];
+    let matchesWithoutSemi = [...code.matchAll(regexWithoutSemicolon)];
+
+    if (matchesWithSemi.length > 0) {
+        // Print valid lines
+        output.textContent = matchesWithSemi.map(m => m[1]).join("\n");
+    } 
+    else if (matchesWithoutSemi.length > 0) {
+        // Found syntax without semicolon
+        output.textContent += " ERROR (most recent call last):\n A function MUST end with a semicolon. \n";
+        output.textContent += "Error type: SyntaxError";
+        errored = 1;
+    } 
+    else {
+        // Everything else = unknown syntax
+        output.textContent = "ERROR: function in your code is not defined. \n";
+        output.textContent += "Error type: UndefinedFunction";
+        errored = 1;
+    }
+
+    const regexWarningWithSemicolon = /console\.writeline::Warn\s*\(\s*"([^"]*)"\s*\)\s*;/gi;
+    const regexWarningWithoutSemicolon = /console\.writeline::Warn\s*\(\s*"([^"]*)"\s*\)\s*$/gi;
+    let warningMatchesWithSemi = [...code.matchAll(regexWarningWithSemicolon)];
+    let warningMatchesWithoutSemi = [...code.matchAll(regexWarningWithoutSemicolon)];
+
+    // Print warnings if found
+    if (warningMatchesWithSemi.length > 0) {
+        output.textContent += "\n" + warningMatchesWithSemi.map(m => "Warning: " + m[1]).join("\n");
+    } else if (warningMatchesWithoutSemi.length > 0) {
+        output.textContent += "\n ERROR (most recent call last):\n A function MUST end with a semicolon. \n";
+        output.textContent += "Error type: SyntaxError";
+        errored = 1;
+    }
+    // throw function matching
+const regexRaiseWithSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*;/gi;
+const regexRaiseWithoutSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*$/gi;
+
+
+let raiseMatchesWithSemi = [...code.matchAll(regexRaiseWithSemi)];
+let raiseMatchesWithoutSemi = [...code.matchAll(regexRaiseWithoutSemi)];
+
+if (raiseMatchesWithSemi.length > 0) {
+    output.textContent += "\n" + raiseMatchesWithSemi.map(m =>
+        `ERROR (most recent call last): ${m[2]}\nError type: ${m[1]}`).join("\n");
+    errored = 1;
+} 
+else if (raiseMatchesWithoutSemi.length > 0) {
+    output.textContent += "\n ERROR (most recent call last):\nA function MUST end with a semicolon. \n";
+    output.textContent += "Error type: SyntaxError";
+    errored = 1;
+}
+
+if (errored === 0) {
+    output.textContent += "\n\n === Code execution completed successfully. ===";
+} else {
+    output.textContent += "\n\n=== Code Execution terminated due to errors. ===";
+}
+
+
+}
+
+</script>
+
+
+
+
+
+
+    </body>
+</html>
