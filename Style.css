@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #191f33;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.title {
+    color: #ffffff;
+    text-align: center;
+    top: 20px;
+    position: absolute;
+    left: 45%;
+}
+
+.title2 {
+    color: #ffffff;
+    text-align: center;
+    top: 60px;
+    position: absolute;
+    left: 40%;
+    font-size: 14px;
+}
+
+.code {
+    flex: 1;
+    margin: 0;
+    border-radius: 0 6px 6px 0;
+    font-family: monospace;
+    width: 50%;
+    font-size: 14px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2c3350;
+    color: #ffffff;
+    left: 8%;
+    top: 158px;
+    position: absolute;
+    outline: none;
+    height: 282px;
+    resize: none;
+
+    /* Ensure vertical scrolling works */
+    overflow-y: scroll; /* always show scrollbar */
+    white-space: pre;   /* prevent text wrapping inside textarea */
+}
+
+
+.white {
+    color: #ffffff;
+}
+
+.button-run {
+    display: block;
+    margin: 20px auto; /* Centers horizontally */
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #4d79aa;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    position: absolute;
+    left: 1038px;
+    top: -10px;
+    z-index: 1;
+}
+
+.button-run:hover {
+    background-color: #3c6088;
+}
+
+.result {
+    display: block;
+    position: absolute;
+    left: 60%;
+    height: 400px;
+    top: 60px;
+    width: 30%;
+    background-color: #2c3350;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    overflow-y: auto; /* Allow vertical scrolling */
+}
+
+
+.output-header {
+    position: absolute;
+    left: 60%;
+    top: 10px;
+    width: 30%;
+    border-radius: 6px;
+    background-color: #2c3350;
+}
+
+.output-text {
+    color: #ffffff;
+    margin: 0;
+    padding: 15px;
+}
+
+/* For WebKit browsers (Chrome, Edge, Safari) */
+.code::-webkit-scrollbar,
+.result::-webkit-scrollbar {
+    width: 16px; /* thickness of vertical scrollbar */
+}
+
+/* For horizontal scrollbars */
+.code::-webkit-scrollbar:horizontal,
+.result::-webkit-scrollbar:horizontal {
+    height: 16px; /* thickness of horizontal scrollbar */
+}
+
+/* For Firefox */
+.code, .result {
+    scrollbar-width: thin; /* or 'auto' for default, 'thin' for thinner */
+    /* No way to set exact pixel thickness in Firefox */
+    scrollbar-color: #4d79aa #232846;
+}
