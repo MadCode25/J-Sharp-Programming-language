@@ -35,8 +35,8 @@ async function runJSharp() {
     let errored = 0;
 
     // Match all Console.WriteLine("..."); occurrences
-    const regexWithSemicolon = /console\.writeline\s*\(\s*"([^"]*)"\s*\)\s*;/gi;
-    const regexWithoutSemicolon = /console\.writeline\s*\(\s*"([^"]*)"\s*\)\s*$/gi;
+    const regexWithSemicolon = /console\.writeline\s*\(\s*"([^"]*)"\s*\)\s*;/g;
+    const regexWithoutSemicolon = /console\.writeline\s*\(\s*"([^"]*)"\s*\)\s*$/g;
 
     let matchesWithSemi = [...code.matchAll(regexWithSemicolon)];
     let matchesWithoutSemi = [...code.matchAll(regexWithoutSemicolon)];
@@ -58,8 +58,8 @@ async function runJSharp() {
         errored = 1;
     }
 
-    const regexWarningWithSemicolon = /console\.writeline::Warn\s*\(\s*"([^"]*)"\s*\)\s*;/gi;
-    const regexWarningWithoutSemicolon = /console\.writeline::Warn\s*\(\s*"([^"]*)"\s*\)\s*$/gi;
+    const regexWarningWithSemicolon = /console\.writeline::Warn\s*\(\s*"([^"]*)"\s*\)\s*;/g;
+    const regexWarningWithoutSemicolon = /console\.writeline::Warn\s*\(\s*"([^"]*)"\s*\)\s*$/g;
     let warningMatchesWithSemi = [...code.matchAll(regexWarningWithSemicolon)];
     let warningMatchesWithoutSemi = [...code.matchAll(regexWarningWithoutSemicolon)];
 
@@ -72,8 +72,8 @@ async function runJSharp() {
         errored = 1;
     }
     // throw function matching
-const regexRaiseWithSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*;/gi;
-const regexRaiseWithoutSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*$/gi;
+const regexRaiseWithSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*;/g;
+const regexRaiseWithoutSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*$/g;
 
 
 let raiseMatchesWithSemi = [...code.matchAll(regexRaiseWithSemi)];
@@ -86,6 +86,20 @@ if (raiseMatchesWithSemi.length > 0) {
 } 
 else if (raiseMatchesWithoutSemi.length > 0) {
     output.textContent += "\n ERROR (most recent call last):\nA function MUST end with a semicolon. \n";
+    output.textContent += "Error type: SyntaxError";
+    errored = 1;
+let integer = "";
+const intDeclarationWithSemi = /int [^;]/g;
+const intDeclarationWithoutSemi = /int [^]/g;
+let intMatchesWithSemi = [...code.matchAll(intDeclarationWithSemi)];
+let intMatchesWithoutSemi = [...code.matchAll(intDeclarationWithoutSemi)];
+
+if (intMatchesWithSemi.length > 0) {
+    integer = matches[0][1];
+}
+
+else if (intMatchesWithoutSemi.length > 0) {
+    output.textContent += "\n ERROR (most recent call last):\n A function MUST end with a semicolon. \n";
     output.textContent += "Error type: SyntaxError";
     errored = 1;
 }
